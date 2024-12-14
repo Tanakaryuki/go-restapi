@@ -2,6 +2,8 @@ package task
 
 import (
 	"context"
+	"database/sql"
+	"errors"
 
 	"github.com/Tanakaryuki/go-restapi/internal/app/repository/dto"
 	"github.com/Tanakaryuki/go-restapi/internal/domain/entity"
@@ -19,29 +21,24 @@ func New(conn *sqlx.DB) task.IRepository {
 	}
 }
 
-func (r *repository) GetByUsername(ctx context.Context, username string) ([]*entity.Task, error) {
-	query := `SELECT id, title, detail, administrator_user, created_at, update_at FROM tasks WHERE administrator_user = ?`
-	rows, err := r.conn.QueryContext(ctx, query, username)
+func (r *repository) GetByID(ctx context.Context, id string) (*entity.Task, error) {
+	var t dto.Task
+	query := `SELECT id, title, detail, administrator_user, created_at, updated_at FROM tasks WHERE id = ?`
+	err := r.conn.GetContext(ctx, &t, query, id)
 	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return nil, nil
+		}
 		return nil, err
 	}
-	defer rows.Close()
 
-	var tasks []*entity.Task
-	for rows.Next() {
-		var t dto.Task
-		if err := rows.Scan(&t.ID, &t.Title, &t.Detail, &t.AdministratorUser, &t.CreatedAt, &t.UpdatedAt); err != nil {
-			return nil, err
-		}
-		task := &entity.Task{
-			ID:                t.ID,
-			Title:             t.Title,
-			Detail:            t.Detail,
-			AdministratorUser: t.AdministratorUser.String,
-			CreatedAt:         t.CreatedAt,
-			UpdatedAt:         t.UpdatedAt,
-		}
-		tasks = append(tasks, task)
+	task := &entity.Task{
+		ID:                t.ID,
+		Title:             t.Title,
+		Detail:            t.Detail,
+		AdministratorUser: t.AdministratorUser.String,
+		CreatedAt:         t.CreatedAt,
+		UpdatedAt:         t.UpdatedAt,
 	}
-	return tasks, nil
+	return task, nil
 }

@@ -21,7 +21,7 @@ func main() {
 		fmt.Fprint(w, "Hello World")
 	})
 
-	mux.Handle("GET /task/{username}", handler.AppHandler(h.TaskHander.GetTask()))
+	mux.Handle("GET /task/{id}", handler.AppHandler(h.TaskHander.GetTask()))
 
 	loggedMux := log.LoggingMiddleware(mux)
 

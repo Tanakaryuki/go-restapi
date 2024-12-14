@@ -7,5 +7,5 @@ import (
 )
 
 type IRepository interface {
-	GetByUsername(ctx context.Context, username string) ([]*entity.Task, error)
+	GetByID(ctx context.Context, id string) (*entity.Task, error)
 }

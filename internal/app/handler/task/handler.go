@@ -20,26 +20,26 @@ func New(taskService task.TaskIService) *Handler {
 
 func (h *Handler) GetTask() func(http.ResponseWriter, *http.Request) error {
 	return func(w http.ResponseWriter, r *http.Request) error {
-		username := r.PathValue("username")
-		tasks, err := h.taskService.GetTasks(r.Context(), username)
+		id := r.PathValue("id")
+		task, err := h.taskService.GetTasks(r.Context(), id)
 		if err != nil {
 			return err
 		}
-		var schemaTasks []schema.Task
-		for _, task := range tasks {
-			schemaTask := schema.Task{
-				ID:                task.ID,
-				Title:             task.Title,
-				Detail:            task.Detail,
-				AdministratorUser: task.AdministratorUser,
-				CreatedAt:         task.CreatedAt,
-				UpdatedAt:         task.UpdatedAt,
-			}
-			schemaTasks = append(schemaTasks, schemaTask)
+		if task == nil {
+			http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
+			return nil
+		}
+		schemaTask := schema.Task{
+			ID:                task.ID,
+			Title:             task.Title,
+			Detail:            task.Detail,
+			AdministratorUser: task.AdministratorUser,
+			CreatedAt:         task.CreatedAt,
+			UpdatedAt:         task.UpdatedAt,
 		}
 
 		res := schema.GetTaskResponse{
-			Task: schemaTasks,
+			Task: schemaTask,
 		}
 		if err := json.NewEncoder(w).Encode(res); err != nil {
 			return err

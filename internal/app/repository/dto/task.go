@@ -5,10 +5,10 @@ import (
 )
 
 type Task struct {
-	ID                string         `json:"id"`
-	Title             string         `json:"title"`
-	Detail            string         `json:"description"`
-	AdministratorUser sql.NullString `json:"administrator_user"`
-	CreatedAt         string         `json:"created_at"`
-	UpdatedAt         string         `json:"updated_at"`
+	ID                string         `db:"id"`
+	Title             string         `db:"title"`
+	Detail            string         `db:"detail"`
+	AdministratorUser sql.NullString `db:"administrator_user"`
+	CreatedAt         string         `db:"created_at"`
+	UpdatedAt         string         `db:"updated_at"`
 }

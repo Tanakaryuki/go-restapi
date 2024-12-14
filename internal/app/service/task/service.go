@@ -8,7 +8,7 @@ import (
 )
 
 type TaskIService interface {
-	GetTasks(ctx context.Context, username string) ([]*entity.Task, error)
+	GetTasks(ctx context.Context, id string) (*entity.Task, error)
 }
 
 type Service struct {
@@ -21,10 +21,10 @@ func New(taskRepository task.IRepository) TaskIService {
 	}
 }
 
-func (s *Service) GetTasks(ctx context.Context, username string) ([]*entity.Task, error) {
-	tasks, err := s.taskRepository.GetByUsername(ctx, username)
+func (s *Service) GetTasks(ctx context.Context, id string) (*entity.Task, error) {
+	task, err := s.taskRepository.GetByID(ctx, id)
 	if err != nil {
 		return nil, err
 	}
-	return tasks, nil
+	return task, nil
 }
