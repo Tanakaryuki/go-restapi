@@ -20,7 +20,8 @@ func New(taskService task.TaskIService) *Handler {
 
 func (h *Handler) GetTask() func(http.ResponseWriter, *http.Request) error {
 	return func(w http.ResponseWriter, r *http.Request) error {
-		tasks, err := h.taskService.GetTasks(r.Context(), "admin")
+		username := r.PathValue("username")
+		tasks, err := h.taskService.GetTasks(r.Context(), username)
 		if err != nil {
 			return err
 		}
