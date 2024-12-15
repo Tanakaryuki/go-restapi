@@ -18,6 +18,7 @@ var (
 	GoogleAccessID               string
 	Name                         string
 	Basket                       string
+	JWTKey                       []byte
 )
 
 func LoadEnv() {
@@ -37,4 +38,5 @@ func LoadEnv() {
 	GoogleAccessID = os.Getenv("GOOGLE_ACCESS_ID")
 	Name = os.Getenv("NAME")
 	Basket = os.Getenv("BUCKET_NAME")
+	JWTKey = []byte(os.Getenv("jwtKey"))
 }

@@ -5,8 +5,9 @@ import (
 )
 
 const (
-	ErrEmailInUse    = "email already in use"
-	ErrUsernameInUse = "username already in use"
+	ErrEmailInUse      = "email already in use"
+	ErrUsernameInUse   = "username already in use"
+	ErrInvalidPassword = "invalid password"
 )
 
 type Error struct {

@@ -55,3 +55,40 @@ func (h *Handler) CreateUser() func(http.ResponseWriter, *http.Request) error {
 		return nil
 	}
 }
+
+func (h *Handler) Login() func(http.ResponseWriter, *http.Request) error {
+	return func(w http.ResponseWriter, r *http.Request) error {
+		req := schema.LoginRequest{}
+		if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+			http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+			return nil
+		}
+		if err := h.validate.Struct(req); err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return nil
+		}
+		u := &entity.User{
+			Username: req.Username,
+			Password: req.Password,
+		}
+
+		token, err := h.userService.Login(r.Context(), u)
+		if err != nil {
+			switch err.Error() {
+			case errors.ErrInvalidPassword:
+				http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+				return nil
+			default:
+				return err
+			}
+		}
+		res := schema.Token{
+			Token:     token.Token,
+			TokenType: "Bearer",
+		}
+		if err := json.NewEncoder(w).Encode(res); err != nil {
+			return err
+		}
+		return nil
+	}
+}

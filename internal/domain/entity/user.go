@@ -8,3 +8,8 @@ type User struct {
 	Password    string
 	IsAdmin     bool
 }
+
+type Token struct {
+	Token     string
+	TokenType string
+}

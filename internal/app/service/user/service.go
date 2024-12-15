@@ -13,6 +13,7 @@ import (
 
 type UserIService interface {
 	CreateUser(ctx context.Context, user *entity.User) error
+	Login(ctx context.Context, login *entity.User) (*entity.Token, error)
 }
 
 type Service struct {
@@ -52,4 +53,22 @@ func (s *Service) CreateUser(ctx context.Context, user *entity.User) error {
 		return err
 	}
 	return nil
+}
+
+func (s *Service) Login(ctx context.Context, login *entity.User) (*entity.Token, error) {
+	user, err := s.userRepository.GetByUsername(ctx, login.Username)
+	if err != nil {
+		return nil, err
+	}
+	if err = auth.VerifyPassword(user.Password, login.Password); err != nil {
+		return nil, errors.New(pkgErrors.ErrInvalidPassword)
+	}
+	token, err := auth.CreateToken(user.Username)
+	if err != nil {
+		return nil, err
+	}
+	t := &entity.Token{
+		Token: token,
+	}
+	return t, nil
 }

@@ -10,4 +10,5 @@ type IRepository interface {
 	CreateUser(ctx context.Context, user *entity.User) error
 	ExistsByEmail(ctx context.Context, email string) (bool, error)
 	ExistsByUsername(ctx context.Context, username string) (bool, error)
+	GetByUsername(ctx context.Context, username string) (*entity.User, error)
 }

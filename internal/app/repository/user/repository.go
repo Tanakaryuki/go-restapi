@@ -49,3 +49,21 @@ func (r *repository) ExistsByUsername(ctx context.Context, username string) (boo
 	err := r.conn.GetContext(ctx, &exists, query, username)
 	return exists, err
 }
+
+func (r *repository) GetByUsername(ctx context.Context, username string) (*entity.User, error) {
+	var u dto.User
+	query := `SELECT uuid, username, email, hashed_password, display_name, is_admin, created_at, updated_at, deleted_at FROM users WHERE username = ?`
+	err := r.conn.GetContext(ctx, &u, query, username)
+	if err != nil {
+		return nil, err
+	}
+	user := &entity.User{
+		UUID:        u.UUID,
+		Username:    u.Username,
+		Email:       u.Email,
+		Password:    u.HashedPassword,
+		DisplayName: u.DisplayName,
+		IsAdmin:     u.IsAdmin,
+	}
+	return user, nil
+}

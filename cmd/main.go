@@ -22,6 +22,7 @@ func main() {
 	})
 
 	mux.Handle("POST /signup", handler.AppHandler(h.UserHander.CreateUser()))
+	mux.Handle("POST /login", handler.AppHandler(h.UserHander.Login()))
 
 	mux.Handle("GET /task/{id}", handler.AppHandler(h.TaskHander.GetTask()))
 
