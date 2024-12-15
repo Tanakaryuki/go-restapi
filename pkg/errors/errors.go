@@ -4,6 +4,11 @@ import (
 	"runtime/debug"
 )
 
+const (
+	ErrEmailInUse    = "email already in use"
+	ErrUsernameInUse = "username already in use"
+)
+
 type Error struct {
 	Status     int
 	Err        error

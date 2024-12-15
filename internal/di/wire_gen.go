@@ -9,8 +9,11 @@ package di
 import (
 	"github.com/Tanakaryuki/go-restapi/internal/app/handler"
 	task3 "github.com/Tanakaryuki/go-restapi/internal/app/handler/task"
+	user3 "github.com/Tanakaryuki/go-restapi/internal/app/handler/user"
 	"github.com/Tanakaryuki/go-restapi/internal/app/repository/task"
+	"github.com/Tanakaryuki/go-restapi/internal/app/repository/user"
 	task2 "github.com/Tanakaryuki/go-restapi/internal/app/service/task"
+	user2 "github.com/Tanakaryuki/go-restapi/internal/app/service/user"
 	"github.com/Tanakaryuki/go-restapi/pkg/db"
 )
 
@@ -21,6 +24,9 @@ func InitHandler() *handler.Root {
 	iRepository := task.New(sqlxDB)
 	taskIService := task2.New(iRepository)
 	taskHandler := task3.New(taskIService)
-	root := handler.New(taskHandler)
+	userIRepository := user.New(sqlxDB)
+	userIService := user2.New(userIRepository)
+	userHandler := user3.New(userIService)
+	root := handler.New(taskHandler, userHandler)
 	return root
 }

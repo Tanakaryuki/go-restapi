@@ -21,6 +21,8 @@ func main() {
 		fmt.Fprint(w, "Hello World")
 	})
 
+	mux.Handle("POST /signup", handler.AppHandler(h.UserHander.CreateUser()))
+
 	mux.Handle("GET /task/{id}", handler.AppHandler(h.TaskHander.GetTask()))
 
 	loggedMux := log.LoggingMiddleware(mux)
