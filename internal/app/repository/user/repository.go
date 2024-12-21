@@ -64,6 +64,9 @@ func (r *repository) GetByUsername(ctx context.Context, username string) (*entit
 		Password:    u.HashedPassword,
 		DisplayName: u.DisplayName,
 		IsAdmin:     u.IsAdmin,
+		CreatedAt:   u.CreatedAt,
+		UpdatedAt:   u.UpdatedAt,
+		DeletedAt:   u.DeletedAt.String,
 	}
 	return user, nil
 }

@@ -8,6 +8,7 @@ import (
 	"github.com/Tanakaryuki/go-restapi/internal/app/service/user"
 	"github.com/Tanakaryuki/go-restapi/internal/domain/entity"
 	"github.com/Tanakaryuki/go-restapi/pkg/errors"
+	"github.com/Tanakaryuki/go-restapi/pkg/middleware"
 	"github.com/go-playground/validator/v10"
 )
 
@@ -85,6 +86,30 @@ func (h *Handler) Login() func(http.ResponseWriter, *http.Request) error {
 		res := schema.Token{
 			Token:     token.Token,
 			TokenType: "Bearer",
+		}
+		if err := json.NewEncoder(w).Encode(res); err != nil {
+			return err
+		}
+		return nil
+	}
+}
+
+func (h *Handler) GetMe() func(http.ResponseWriter, *http.Request) error {
+	return func(w http.ResponseWriter, r *http.Request) error {
+		username := r.Context().Value(middleware.UsernameKey).(string)
+		user, err := h.userService.GetUserByUsername(r.Context(), username)
+		if err != nil {
+			return err
+		}
+		res := schema.UserDetailResponse{
+			UUID:        user.UUID,
+			Username:    user.Username,
+			Email:       user.Email,
+			DisplayName: user.DisplayName,
+			IsAdmin:     user.IsAdmin,
+			CreatedAt:   user.CreatedAt,
+			UpdatedAt:   user.UpdatedAt,
+			DeletedAt:   user.DeletedAt,
 		}
 		if err := json.NewEncoder(w).Encode(res); err != nil {
 			return err

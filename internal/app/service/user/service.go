@@ -14,6 +14,7 @@ import (
 type UserIService interface {
 	CreateUser(ctx context.Context, user *entity.User) error
 	Login(ctx context.Context, login *entity.User) (*entity.Token, error)
+	GetUserByUsername(ctx context.Context, username string) (*entity.User, error)
 }
 
 type Service struct {
@@ -71,4 +72,12 @@ func (s *Service) Login(ctx context.Context, login *entity.User) (*entity.Token,
 		Token: token,
 	}
 	return t, nil
+}
+
+func (s *Service) GetUserByUsername(ctx context.Context, username string) (*entity.User, error) {
+	user, err := s.userRepository.GetByUsername(ctx, username)
+	if err != nil {
+		return nil, err
+	}
+	return user, nil
 }

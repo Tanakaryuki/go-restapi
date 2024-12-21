@@ -8,6 +8,7 @@ import (
 	"github.com/Tanakaryuki/go-restapi/pkg/config"
 	"github.com/Tanakaryuki/go-restapi/pkg/handler"
 	"github.com/Tanakaryuki/go-restapi/pkg/log"
+	"github.com/Tanakaryuki/go-restapi/pkg/middleware"
 )
 
 func main() {
@@ -23,6 +24,7 @@ func main() {
 
 	mux.Handle("POST /signup", handler.AppHandler(h.UserHander.CreateUser()))
 	mux.Handle("POST /login", handler.AppHandler(h.UserHander.Login()))
+	mux.Handle("GET /me", middleware.Auth(handler.AppHandler(h.UserHander.GetMe())))
 
 	mux.Handle("GET /task/{id}", handler.AppHandler(h.TaskHander.GetTask()))
 

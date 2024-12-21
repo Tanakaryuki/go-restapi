@@ -7,6 +7,9 @@ type User struct {
 	DisplayName string
 	Password    string
 	IsAdmin     bool
+	UpdatedAt   string
+	CreatedAt   string
+	DeletedAt   string
 }
 
 type Token struct {
