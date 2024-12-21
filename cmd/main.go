@@ -26,7 +26,7 @@ func main() {
 	mux.Handle("POST /login", handler.AppHandler(h.UserHander.Login()))
 	mux.Handle("GET /me", middleware.Auth(handler.AppHandler(h.UserHander.GetMe())))
 
-	mux.Handle("GET /task/{id}", handler.AppHandler(h.TaskHander.GetTask()))
+	mux.Handle("GET /task/{id}", middleware.Auth(handler.AppHandler(h.TaskHander.GetTask())))
 
 	loggedMux := log.LoggingMiddleware(mux)
 
