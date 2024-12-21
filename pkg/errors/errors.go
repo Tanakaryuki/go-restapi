@@ -8,6 +8,7 @@ const (
 	ErrEmailInUse      = "email already in use"
 	ErrUsernameInUse   = "username already in use"
 	ErrInvalidPassword = "invalid password"
+	ErrIDInUse         = "id already in use"
 )
 
 type Error struct {

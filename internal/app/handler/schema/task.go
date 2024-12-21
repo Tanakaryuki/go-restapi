@@ -12,3 +12,9 @@ type Task struct {
 type GetTaskResponse struct {
 	Task Task `json:"task"`
 }
+
+type CreateTaskRequest struct {
+	ID     string `json:"id" validate:"required"`
+	Title  string `json:"title" validate:"required"`
+	Detail string `json:"detail" validate:"required"`
+}

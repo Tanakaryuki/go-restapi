@@ -42,3 +42,22 @@ func (r *repository) GetByID(ctx context.Context, id string) (*entity.Task, erro
 	}
 	return task, nil
 }
+
+func (r *repository) ExistsByID(ctx context.Context, id string) (bool, error) {
+	query := `SELECT EXISTS(SELECT id FROM tasks WHERE id = ?)`
+	var exists bool
+	err := r.conn.GetContext(ctx, &exists, query, id)
+	if err != nil {
+		return false, err
+	}
+	return exists, nil
+}
+
+func (r *repository) Create(ctx context.Context, task *entity.Task) error {
+	query := `INSERT INTO tasks (id, title, detail, administrator_user) VALUES (?, ?, ?, ?)`
+	_, err := r.conn.ExecContext(ctx, query, task.ID, task.Title, task.Detail, task.AdministratorUser)
+	if err != nil {
+		return err
+	}
+	return nil
+}
