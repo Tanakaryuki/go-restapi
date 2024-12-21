@@ -73,7 +73,7 @@ func (h *Handler) Login() func(http.ResponseWriter, *http.Request) error {
 			Password: req.Password,
 		}
 
-		token, err := h.userService.Login(r.Context(), u)
+		token, err := h.userService.CreateToken(r.Context(), u)
 		if err != nil {
 			switch err.Error() {
 			case errors.ErrInvalidPassword:

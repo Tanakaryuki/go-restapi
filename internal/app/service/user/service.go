@@ -13,7 +13,7 @@ import (
 
 type UserIService interface {
 	CreateUser(ctx context.Context, user *entity.User) error
-	Login(ctx context.Context, login *entity.User) (*entity.Token, error)
+	CreateToken(ctx context.Context, login *entity.User) (*entity.Token, error)
 	GetUserByUsername(ctx context.Context, username string) (*entity.User, error)
 }
 
@@ -56,7 +56,7 @@ func (s *Service) CreateUser(ctx context.Context, user *entity.User) error {
 	return nil
 }
 
-func (s *Service) Login(ctx context.Context, login *entity.User) (*entity.Token, error) {
+func (s *Service) CreateToken(ctx context.Context, login *entity.User) (*entity.Token, error) {
 	user, err := s.userRepository.GetByUsername(ctx, login.Username)
 	if err != nil {
 		return nil, err
